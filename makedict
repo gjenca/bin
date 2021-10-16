@@ -1,0 +1,2 @@
+#!/bin/sh
+cat *.bib | grep '^ *@' | sed 's/.*{[ 	]*//'| sed 's/,.*//' | sort | uniq

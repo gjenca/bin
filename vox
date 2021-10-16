@@ -1,0 +1,19 @@
+#!/bin/sh
+if [ -z "$1" ]
+then
+	echo 'Usage : vox [ on | off ]'
+	exit
+fi
+
+if [ "$1" == 'on' ]
+then
+	sshfs jenca@vox.svf.stuba.sk: ~/vox.svf.stuba.sk/ 
+	exit
+fi
+if [ "$1" == 'off' ]
+then
+	fusermount -u ~/vox.svf.stuba.sk/
+	exit
+fi
+echo 'Usage : vox [ on | off]'
+

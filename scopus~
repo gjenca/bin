@@ -1,0 +1,2 @@
+#!/bin/bash
+ssh -p 2222 -CY jenca@mpm.svf.stuba.sk firefox http://www.scopus.com

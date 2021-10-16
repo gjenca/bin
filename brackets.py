@@ -1,0 +1,19 @@
+#!/usr/bin/python2
+import sys
+i=0
+total_bilance=0
+for line in sys.stdin:
+    i+=1
+    bilance=0
+    line=line.replace(r'\[','').replace(r'\]','')
+    for char in line:
+        if char in '([':
+            bilance+=1
+        elif char in ')]':
+            bilance-=1
+    if bilance<>0:
+        sys.stdout.write("%d:%d:%s" % (i,bilance,line))
+    total_bilance+=bilance
+
+print
+print "Total bilance:",total_bilance

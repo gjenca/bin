@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+
+import sys
+sys.path.append("/home/gejza/python3/modules")
+sys.path.append("/home/gejza/python3/modules/bitbucketapi")
+from bitbucketapi.api import BitBucket
+import configparser
+from urllib.parse import urlparse
+import argparse
+from tempfile import mkstemp
+import os
+import subprocess
+import re
+
+parser = argparse.ArgumentParser(description='Send an issue to a bitbucket repository.')
+parser.add_argument("-t","--title",help="title",required=True)
+parser.add_argument("-T","--template",help="template")
+parser.add_argument("-f","--file",help="edit and send this file, not a temporary file")
+
+args=parser.parse_args()
+
+bucket = BitBucket("gjenca", "projective")
+for n in range(8):
+    try:
+        filename=(n*"../")+".hg/hgrc"
+        with open(filename):
+            config = configparser.ConfigParser()
+            config.read(filename)
+            break
+    except IOError:
+        pass
+else:
+    sys.stderr.write("Cannot find .hg/hgrc\n")
+    quit()
+repo=config['paths']['default']
+repo=re.sub("^ssh://hg@","https://",repo)
+sys.stderr.write(repo)
+pr=urlparse(repo)
+if not pr.hostname.endswith('bitbucket.org'):
+    raise Exception(pr.hostname+" unsupported")
+prs=pr.path.split('/')
+username=prs[1]
+path="/".join(prs[2:])
+bucket.getIssues(username,path)
+if not args.file:
+    thandle,tfilename=mkstemp()
+    tfile=os.fdopen(thandle,"r+")
+else:
+    tfilename=args.file
+    tfile=open(args.file,"w+")
+    tfile.seek(0)
+if args.template:
+    tfile.write(open(args.template).read())
+else:
+    tfile.write("## Write an issue for the repository %s below" % repo)
+tfile.flush()
+subprocess.call([os.environ.get("EDITOR","vi"),tfilename])
+lines=open(tfilename).readlines()
+lines=[line for line in lines if not line.startswith("##")]
+answer=None
+if any(line.strip() for line in lines):
+    while True:
+        sys.stderr.write("Send issue [y/n]:")
+        sys.stderr.flush()
+        answer = input()
+        if answer == "y":
+            bucket.addIssue(username,path,args.title,"".join(lines))
+            break
+        if answer == "n":
+            break
+else:
+    sys.stderr.write("Issue empty: not sending.\n")
+if not args.file or answer=="n":
+    os.unlink(tfilename)
+
+
+

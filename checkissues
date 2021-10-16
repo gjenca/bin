@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+
+import sys
+sys.path.append("/home/gejza/python3/modules")
+sys.path.append("/home/gejza/python3/modules/bitbucketapi")
+from bitbucketapi.api import BitBucket
+import configparser
+from urllib.parse import urlparse
+import argparse
+from tempfile import mkstemp
+import os
+import subprocess
+import re
+
+bucket = BitBucket("gjenca", "projective")
+for n in range(8):
+    try:
+        filename=(n*"../")+".hg/hgrc"
+        with open(filename):
+            config = configparser.ConfigParser()
+            config.read(filename)
+            repo=config['paths']['default']
+            break
+    except IOError:
+        pass
+    try:
+        filename=(n*"../")+".git/config"
+        with open(filename):
+            config = configparser.ConfigParser()
+            config.read(filename)
+            repo=config['remote "origin"']['url']
+            break
+    except IOError:
+        pass
+else:
+    sys.stderr.write("Cannot find .hg/hgrc or .git/config\n")
+    quit()
+repo=re.sub("^ssh://hg@","https://",repo)
+repo=re.sub("^ssh://git@","https://",repo)
+pr=urlparse(repo)
+if not pr.hostname.endswith('bitbucket.org'):
+    raise Exception(pr.hostname+" unsupported")
+prs=pr.path.split('/')
+username=prs[1]
+path="/".join(prs[2:])
+bucket.getIssues(username,path)

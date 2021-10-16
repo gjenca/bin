@@ -1,0 +1,24 @@
+#!/bin/bash
+cat <<THEEND >.gitignore
+*.dvi
+*.pdf
+*.bbl
+*.blg
+*.log
+*~
+*.out
+*.eps
+*.aux
+*.pyc
+*.ps
+*.nav
+*.snm
+*.toc
+.directory
+*.spl
+*.png
+*.synctex.gz
+THEEND
+git add .gitignore
+git commit -m 'gitignore'
+

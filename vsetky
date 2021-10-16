@@ -1,0 +1,24 @@
+#!/bin/bash
+echo "PREPRINT -- po dve stranky na 1 A4"
+echo "Vstup :" $1 "Vystup:" vsetky.ps
+if test $2 -a $2 = "m" ; then
+echo "Zvacsenie : 1200"
+dvips -x 1200 -o /tmp/tmp.ps $1
+else
+dvips -o /tmp/tmp.ps $1
+fi
+cat /tmp/tmp.ps | psnup -2 > vsetky.ps
+rm /tmp/tmp.ps
+
+
+
+
+
+
+
+
+
+
+
+
+

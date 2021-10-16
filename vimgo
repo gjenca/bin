@@ -1,0 +1,11 @@
+#!/bin/sh
+for SERVERNAME in $(vim --serverlist)
+do
+	if vim --remote-expr 'execute("files")' | grep $(basename $2) >/dev/null 2>/dev/null
+	then
+		vim --servername ${SERVERNAME} --remote-send "<C-\><C-N>:drop<Space>$2<CR>$1gg" 2>/dev/null
+		wmctrl -a VIM
+		exit 0
+	fi
+done
+exit 0

@@ -1,0 +1,7 @@
+#!/usr/bin/python
+import sys
+from random import shuffle
+z=range(1,10)
+shuffle(z)
+print z[int(sys.argv[1])-1]
+

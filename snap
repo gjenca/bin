@@ -1,0 +1,4 @@
+#!/bin/bash
+# Capture currently active window
+id=`xprop -root _NET_ACTIVE_WINDOW | sed 's/.* //'`
+convert x:"$id" capture-tmp-$$.png

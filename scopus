@@ -1,0 +1,2 @@
+#!/bin/bash
+ssh -p 2222 -CY jenca@mpm.svf.stuba.sk LANG=sk_SK.UTF-8 firefox http://www.scopus.com

@@ -1,0 +1,19 @@
+#!/bin/sh
+if [ -z "$1" ]
+then
+	echo 'Usage : euler [ on | off ]'
+	exit
+fi
+
+if [ "$1" == 'on' ]
+then
+	sshfs -p 2222 jenca@euler.elf.stuba.sk: ~/euler.elf.stuba.sk/
+	exit
+fi
+if [ "$1" == 'off' ]
+then
+	fusermount -u ~/euler.elf.stuba.sk/
+	exit
+fi
+echo 'Usage : euler [ on | off]'
+

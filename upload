@@ -1,0 +1,28 @@
+#!/bin/sh
+
+SETCOLOR_GREEN="echo -en \\033[1;32m"
+SETCOLOR_RED="echo -en \\033[1;31m"
+SETCOLOR_NORMAL="echo -en \\033[0;39m"
+
+hlaska() {
+$SETCOLOR_GREEN
+echo $1
+$SETCOLOR_NORMAL
+}
+
+
+ADDRESS=$1
+if [ "$ADDRESS" == "" ]; then
+	echo "Pou¾itie: `basename $0` [uzivatel@]adresa"
+	exit 1
+fi
+BASE=`basename $PWD`
+cd ..
+hlaska "Pakujem $BASE"
+tar cz $BASE > $BASE.tar.gz
+hlaska "Vytváram incoming"
+ssh $ADDRESS mkdir incoming 2>/dev/null
+hlaska 
+scp $BASE.tar.gz $ADDRESS:incoming
+
+

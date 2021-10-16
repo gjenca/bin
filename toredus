@@ -1,0 +1,2 @@
+#!/bin/bash
+curl -s https://check.torproject.org/exit-addresses | grep ^ExitAddress | cut -f2 -d' '

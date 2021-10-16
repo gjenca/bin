@@ -1,0 +1,37 @@
+#! /bin/sh
+# $Id$
+# vql, Thu, 27 Sep 2007, 17:56:09 EDT
+#
+# To pop up an X terminal (xterm) and run vim command within this
+# terminal window.
+# This script is intended to be invoked by the Firefox addon It's
+# All Text for editing wiki pages
+#
+# The arguments for xterm are the same as those used to open up
+# X terminals in laptop io2.  See ~/manuals/laptop.io2.fc3.html,
+# Section on xfce.
+# For gray background: (NOT NEEDED, since the X terminal would be
+#   closed down after quitting the wiki file); the \ is for
+#   continuation to the next line:
+#
+#   -bg gray \
+#
+# For font size:
+#   -fn -misc-fixed-medium-r-normal--18-120-100-100-c-90-iso10646-1 \
+#
+# For the sidebar:
+#   -sb
+#
+# For the size of the window (80 columns, 39 lines, right justified)
+#   -geometry 80x39+800 \
+#
+# For executing vim on the file being the first argument of the script
+#   -e /usr/bin/vim $argv[1]
+#
+# Exit codes:
+# 0 = no problem
+#
+# Updated for generic Bourne shell by Eeera 2008-03-27
+ 
+/usr/bin/konsole \
+   -e /usr/bin/vim "$1"

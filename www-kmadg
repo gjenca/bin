@@ -1,0 +1,19 @@
+#!/bin/sh
+if [ -z "$1" ]
+then
+	echo 'Usage : www-kmadg [ on | off ]'
+	exit
+fi
+
+if [ "$1" == 'on' ]
+then
+	sshfs jenca@www-kmadg.svf.stuba.sk: ~/www-kmadg.svf.stuba.sk/
+	exit
+fi
+if [ "$1" == 'off' ]
+then
+	fusermount -u ~/www-kmadg.svf.stuba.sk/
+	exit
+fi
+echo 'Usage : www-kmadg [ on | off]'
+

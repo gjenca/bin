@@ -1,0 +1,3 @@
+#!/bin/sh
+dosbox -c "mount c ~/dosc" -c "c:" -c "cd tim2" -c "tim2" -c "exit" $*
+

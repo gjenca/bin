@@ -1,0 +1,9 @@
+#!/bin/bash
+grep -v '^#' |
+while read IP
+do
+	ROLE=`dig -x "$IP" | grep '^[^;].*\<PTR\>' | head -n 1`
+	ROLE=`echo $ROLE | sed 's/.* //'`
+	echo $IP $ROLE
+done
+

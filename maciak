@@ -1,0 +1,19 @@
+#!/bin/sh
+if [ -z "$1" ]
+then
+	echo 'Usage : maciak [ on | off ]'
+	exit
+fi
+
+if [ "$1" == 'on' ]
+then
+	sshfs jencova@mat.savba.sk: ~/maciak/
+	exit
+fi
+if [ "$1" == 'off' ]
+then
+	fusermount -u ~/maciak/
+	exit
+fi
+echo 'Usage : maciak [ on | off]'
+

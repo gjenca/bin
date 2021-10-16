@@ -1,0 +1,19 @@
+#!/bin/sh
+if [ -z "$1" ]
+then
+	echo 'Usage : kmat [ on | off ]'
+	exit
+fi
+
+if [ "$1" == 'on' ]
+then
+	ncpmount kmat/jenca ~/kmat
+	exit
+fi
+if [ "$1" == 'off' ]
+then
+	ncpumount ~/kmat
+	exit
+fi
+echo 'Usage : kmat [ on | off]'
+

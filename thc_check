@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+cat <<END >/tmp/$$.html
+<html>
+<body>
+<div style="color:#00FF00; 
+background-color:black;
+padding:3em; 
+font-family:tahoma,ariel,helvetica; 
+width:600px; 
+margin-left:auto; 
+margin-right:auto;">
+<p> before </p>
+<hr>
+END
+cat >> /tmp/$$.html
+cat <<END >>/tmp/$$.html
+<hr>
+<p> after </p>
+</div>
+</body>
+</html>
+END
+firefox /tmp/$$.html
+sleep 1
+rm /tmp/$$.html
+

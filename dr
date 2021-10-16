@@ -1,0 +1,19 @@
+#!/bin/sh
+if [ -z "$1" ]
+then
+	echo 'Usage : dr [ on | off ]'
+	exit
+fi
+
+if [ "$1" == 'on' ]
+then
+	sshfs dubravskirodicia.info@ftp.dubravskirodicia.info:/ ~/dubravskirodicia.info/
+	exit
+fi
+if [ "$1" == 'off' ]
+then
+	fusermount -u ~/dubravskirodicia.info/
+	exit
+fi
+echo 'Usage : dr [ on | off]'
+

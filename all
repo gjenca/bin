@@ -1,0 +1,21 @@
+#!/bin/sh
+if [ -z "$1" ]
+then
+	echo 'Usage : all [ on | off ]'
+	exit
+fi
+if [ "$1" == 'on' ]
+then
+	for M in b206 www-kmadg euler vox; do
+		$M on
+		echo $M on
+	done
+	exit
+fi
+if [ "$1" == 'off' ]
+then
+	remote_off
+	exit
+fi
+echo 'Usage : all [ on | off]'
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+test -z "$DISPLAY" && exec vim "$@"
+if vim --serverlist | grep . > /dev/null
+then
+	vim --sync --servername VIM --remote "$@"
+	wmctrl -a VIM
+else
+	vim --sync --servername VIM "$@"
+fi
+
+

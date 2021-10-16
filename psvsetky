@@ -1,0 +1,19 @@
+#!/bin/bash
+echo "Po dve stranky na 1 A4"
+echo "Vstup :" "$1" "Vystup:" vsetky.ps
+cp "$1" /tmp/tmp.ps
+cat /tmp/tmp.ps | psnup -2 > vsetky.ps
+rm /tmp/tmp.ps
+
+
+
+
+
+
+
+
+
+
+
+
+

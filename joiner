@@ -1,0 +1,49 @@
+#!/bin/sh
+
+if [ $# -eq 1 ]
+then
+	cat $1
+	exit
+fi
+
+if [ $# -eq 0 ]
+then
+	exit
+fi
+
+if [ "$KEY" = "" ]
+then
+	KEY="KRUZOK"
+fi
+
+# Joins several .dat files into a common one on stdout
+# Adds separators (the key ends after $KEY field)
+for file in $*
+do
+	sed -e "s/\($KEY={[^}]*}\) /\1@/g" < $file > $file.tmp
+done
+
+join -t@ $1.tmp $2.tmp > joiner.dat
+save1=$1
+save2=$2
+
+shift ; shift 
+
+for file in $*
+do
+	join -t@ joiner.dat $file.tmp > joiner.dat.tmp
+	mv joiner.dat.tmp joiner.dat
+done
+
+# removes the .tmp files
+
+for file in $save1 $save2 $*
+do 
+	rm $file.tmp
+done
+
+# Deletes separators
+sed -e "s/\}[[:space:]]*@/\} /g" < joiner.dat
+# removes the joiner.dat
+rm joiner.dat
+

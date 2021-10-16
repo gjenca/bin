@@ -1,0 +1,20 @@
+#!/bin/bash
+echo "PREPRINT -- vytvorenie parnych a neparnych stranok"
+echo "Vstup :" $1 "Vystup:" parne.ps neparne.ps
+cp $1 /tmp/tmp.ps
+psbook /tmp/tmp.ps | psnup -2 | psselect -e > neparne.ps
+psbook /tmp/tmp.ps | psnup -2 | psselect -o > parne.ps
+rm /tmp/tmp.ps
+
+
+
+
+
+
+
+
+
+
+
+
+

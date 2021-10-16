@@ -1,0 +1,19 @@
+#!/bin/sh
+if [ -z "$1" ]
+then
+	echo 'Usage : alanko [ on | off ]'
+	exit
+fi
+
+if [ "$1" == 'on' ]
+then
+	sshfs gejza@192.168.0.100:/ ~/alanko/
+	exit
+fi
+if [ "$1" == 'off' ]
+then
+	fusermount -u ~/alanko/
+	exit
+fi
+echo 'Usage : alanko [ on | off]'
+

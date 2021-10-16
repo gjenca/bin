@@ -1,0 +1,16 @@
+#!/usr/bin/python2
+import sys
+import dateutil.parser
+
+for line in sys.stdin:
+    fields=line.strip().split()
+    doklad=fields[0]
+    datum=dateutil.parser.parse(fields[1],dayfirst=True).strftime("%Y-%m-%d")
+    hodnota=fields[2].replace(",",".")
+    descr=" ".join(fields[3:])
+    print "- nazov: "+descr
+    print "  datum: "+datum
+    print "  hodnota: "+hodnota
+    print '  kolonka: ""'
+    print "  doklad: "+doklad
+

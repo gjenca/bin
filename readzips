@@ -1,0 +1,10 @@
+#!/usr/bin/python
+import mailbox
+import sys
+
+for msg in mailbox.UnixMailbox(sys.stdin):
+    att=msg.get_payload()[1]
+    print att.get_content_type()
+
+
+

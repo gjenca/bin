@@ -1,0 +1,19 @@
+#!/bin/sh
+if [ -z "$1" ]
+then
+	echo 'Usage : hemul [ on | off ]'
+	exit
+fi
+
+if [ "$1" == 'on' ]
+then
+	sshfs -p 2222 jenca@localhost: ~/hemul/
+	exit
+fi
+if [ "$1" == 'off' ]
+then
+	fusermount -u ~/hemul/
+	exit
+fi
+echo 'Usage : hemul [ on | off]'
+

@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+
+import argparse
+import subprocess
+import time
+import sys
+
+parser=argparse.ArgumentParser()
+parser.add_argument('--subject','-s',required=True)
+parser.add_argument('filename',nargs='+')
+
+args=parser.parse_args()
+
+for filename in args.filename:
+    if '@' not in filename:
+        print(f'filename {filename} does not look like an email address',file=sys.stderr)
+        sys.exit(1)
+
+for filename in args.filename:
+
+    print(f'{filename}',file=sys.stderr)
+    with open(filename) as f:
+        process=subprocess.Popen(['mutt','-s',args.subject,'-c','gejza.jenca@gmail.com',filename],stdin=f)
+        process.wait()
+        time.sleep(0.2)

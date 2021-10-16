@@ -1,0 +1,84 @@
+#!/usr/bin/env python2
+import sys
+import bintrees
+import getopt 
+import os
+
+DIC=os.path.dirname(__file__)+"/sk_SK.dic"
+
+class Anadict(dict):
+
+    def __le__(self,other):
+        return all((key in other) and (self[key]<=other[key]) \
+            for key in self)
+
+    def __sub__(self,other):
+        ret=Anadict()
+        for key in self:
+            ret[key]=self[key]-other.get(key,0)
+        return ret
+
+def make_d(w):
+    d=Anadict()
+    for c in w:
+        if c!='\n':
+            d[c]=d.get(c,0)+1
+    return d
+
+def anagrams(w):
+
+    def danagrams(w_d,dicts,tree,start_at=0,words_so_far=0):
+       
+        if not sum(w_d.itervalues()):
+            yield ""
+        if words_so_far>=maxwords:
+            raise StopIteration
+        for i in xrange(start_at,len(tree)):
+            word=tree[i]
+            if dicts[word]<=w_d:
+                for words in danagrams(w_d-dicts[word],dicts,tree,i,words_so_far+1):
+                    yield word+" "+words.rstrip()
+        raise StopIteration
+    
+    dicts={}
+    tree=bintrees.AVLTree()
+    w_nospace="".join(w.split())
+    w_d=make_d(w_nospace)
+    print >>sys.stderr, "parsing", DIC
+    for i,dword in enumerate(file(DIC)):
+        if not (i+1) % 1000:
+            print >>sys.stderr, '.',
+        if not (i+1) % 5000:
+            print >>sys.stderr, i+1
+        dword=dword.decode('UTF-8').rstrip().lower()
+        if len(dword)<minlength or dword in dicts:
+            continue
+        dword_dict=make_d(dword)
+        if len(dword)<=len(w_nospace) and dword_dict<=w_d:
+            dicts[dword]=dword_dict
+            tree.insert(dword,None)
+     
+    for word in danagrams(w_d,dicts,tree):
+        yield word
+    raise StopIteration
+
+
+if __name__=="__main__":
+    try:
+        opts,args = getopt.getopt(sys.argv[1:],"hm:w:",["help","minlength=","maxwords="])
+    except getopt.GetoptError, err:
+        print str(err)
+        sys.exit(2)
+    minlength=1
+    maxwords=999
+    for opt,par in opts:
+        if opt in ('-h','--help'):
+            print sys.argv[0]+" -m minimal_length -w maximal_no_of_words"
+            sys.exit(0)
+        elif opt in ('-m','--minlength'):
+            minlength=int(par)
+        elif opt in ('-w','--maxwords'):
+            maxwords=int(par)
+    for w in anagrams(args[0].decode('UTF-8')):
+        print w.encode('UTF-8')
+        sys.stdout.flush()

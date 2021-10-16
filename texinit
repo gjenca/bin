@@ -1,0 +1,30 @@
+#!/bin/bash
+cat << THEEND
+\documentclass{article}
+\def\documentlanguage{english}
+\usepackage{ifpdf}
+\usepackage{ifxetex}
+\ifpdf %pdftex
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[all,pdf,2cell]{xy}\UseAllTwocells\SilentMatrices
+\usepackage[\documentlanguage]{babel}
+\fi
+\ifxetex %xetex
+\usepackage[all,pdf,2cell]{xy}\UseAllTwocells\SilentMatrices
+\usepackage{polyglossia}
+\begingroup\edef\x{\endgroup\noexpand\setdefaultlanguage{\documentlanguage}}\x%
+\fi
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newcommand{\newcategory}[1]{\expandafter\newcommand\csname #1\endcsname{\mathbf{#1}}}
+\begin{document}
+\end{document}
+THEEND

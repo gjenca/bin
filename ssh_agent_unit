@@ -1,0 +1,20 @@
+#!/bin/bash
+mkdir -p ~/.config/systemd/user/
+cat <<THE_END >~/.config/systemd/user/ssh-agent.service
+[Unit]
+Description=SSH key agent
+
+[Service]
+Type=simple
+Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
+ExecStart=/usr/bin/ssh-agent -D -a $SSH_AUTH_SOCK
+
+[Install]
+WantedBy=default.target
+THE_END
+systemctl --user daemon-reload
+systemctl --user start ssh-agent
+systemctl --user enable ssh-agent
+systemctl --user status ssh-agent
+
+

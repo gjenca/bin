@@ -1,0 +1,2 @@
+#!/bin/bash
+ssh -YCp 2222 jenca@mpm.svf.stuba.sk firefox 'http://apps.webofknowledge.com/WOS_GeneralSearch_input.do?product=WOS&search_mode=GeneralSearch&SID=V1KF4CbLl7BseqaSRiL&preferencesSaved='

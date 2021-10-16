@@ -1,0 +1,19 @@
+#!/bin/sh
+if [ -z "$1" ]
+then
+	echo 'Usage : jencovci [ on | off ]'
+	exit
+fi
+
+if [ "$1" == 'on' ]
+then
+	sshfs gejza@jencovci.homeunix.org:/ ~/jencovci.homeunix.org/
+	exit
+fi
+if [ "$1" == 'off' ]
+then
+	fusermount -u ~/jencovci.homeunix.org/
+	exit
+fi
+echo 'Usage : jencovci [ on | off]'
+

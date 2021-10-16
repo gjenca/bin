@@ -1,0 +1,24 @@
+#!/bin/sh
+if [ -z "$1" ]
+then
+	echo 'Usage : mpm [ on | off | sh]'
+	exit
+fi
+
+if [ "$1" == 'on' ]
+then
+	sshfs -p 2222 -o follow_symlinks jenca@mpm.svf.stuba.sk: ~/mpm.svf.stuba.sk/
+	exit
+fi
+if [ "$1" == 'off' ]
+then
+	fusermount -u ~/mpm.svf.stuba.sk/
+	exit
+fi
+if [ "$1" == 'sh' ]
+then
+	ssh -p 2222 jenca@mpm.svf.stuba.sk
+	exit
+fi
+echo 'Usage : mpm [ on | off]'
+

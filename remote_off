@@ -1,0 +1,11 @@
+#!/bin/sh
+for FMP in `mount | 
+	grep '/home/gejza.*fuse.sshfs' | 
+	sed 's@.*on \(/home/gejza/[^ ]*\).*@\1@'`
+do
+	echo 'Umounting '$FMP
+	fusermount -u $FMP
+done
+
+#fusermount -u ~/www-kmadg.svf.stuba.sk/
+

@@ -1,0 +1,2 @@
+cd ~/braid/game/
+wine explorer /desktop=braid,800x600 braid.exe

@@ -1,0 +1,19 @@
+#!/bin/sh
+if [ -z "$1" ]
+then
+	echo 'Usage : b206 [ on | off ]'
+	exit
+fi
+
+if [ "$1" == 'on' ]
+then
+	sshfs jenca@b206.svf.stuba.sk: ~/b206.svf.stuba.sk/ -p 22077
+	exit
+fi
+if [ "$1" == 'off' ]
+then
+	fusermount -u ~/b206.svf.stuba.sk/
+	exit
+fi
+echo 'Usage : b206 [ on | off]'
+

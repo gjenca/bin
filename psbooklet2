@@ -1,0 +1,21 @@
+#!/bin/bash
+echo "PREPRINT -- vytvorenie parnych a neparnych stranok Zmensenie s aspektom
+1/sqrt(2)"
+echo "Vstup :" $1 "Vystup:" parne.ps neparne.ps
+cp $1 /tmp/tmp.ps
+psresize -Pletter -pA4 /tmp/tmp.ps | psbook  | psnup -2 | psselect -e > neparne.ps
+psresize -Pletter -pA4 /tmp/tmp.ps | psbook  |  psnup -2 | psselect -o > parne.ps
+rm /tmp/tmp.ps
+
+
+
+
+
+
+
+
+
+
+
+
+

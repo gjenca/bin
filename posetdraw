@@ -1,0 +1,185 @@
+#!/usr/bin/python
+
+import re
+import sys
+
+REMARK=r'^\s*#.*'
+EMPTY=r'^\s*$'
+POINT=r'^\s*(\S+)\s*\(\s*(.+)\s*,\s*(.+)\s*\)(.*)$'
+LINE=r'^\s*(\S+)\s*--\s*(\S+)\s*$'
+ALTLABEL=r'(.*)\s*{(.*)}'
+SPECIAL=r'^\s*!(.*)'
+
+def texname(name,points):
+    
+    name_list=list(name)
+    name_list=[char for char in name_list if char.isalnum()]
+    basename=''.join(name_list)
+    texnames=[point.texname for point in points.values()]
+    if not basename in texnames:
+        return basename
+    ind=0
+    while True:
+        ret="%s:%d" % (basename,ind)
+        if not ret in texnames:
+            return ret
+        ind=ind+1
+
+def rewrite(line,points):
+
+    for point in points.itervalues():
+        if point.name!=point.texname:
+           line=re.sub(r'{\s*'+point.name+'\s*}','{'+point.texname+'}',line)
+    return line
+
+class Header:
+    def printout(self):
+        print r"""
+\documentclass{article}
+\pagestyle{empty}
+\usepackage{pstricks}
+\usepackage{pst-node}
+
+\newcommand{\posetlength}{1.75em}
+\newcommand{\noderadius}{0.075}
+\newcommand{\nodelabelsep}{0.05}
+
+\begin{document}
+\thispagestyle{empty}
+\noindent
+\setlength{\unitlength}{\posetlength}
+\psset{xunit=\posetlength,yunit=\posetlength}
+"""
+
+class Footer:
+
+
+    def __init__(self):
+        self.text=r"""
+\end{picture}
+\end{document}
+"""
+
+    def printout(self):
+        sys.stdout.write(self.text)
+
+    def prepend(self,what,points):
+
+        self.text=rewrite(what,points)+self.text
+
+class Point:
+
+    symb={
+        'r':0,
+        'rt':45,
+        'tr':45,
+        't':90,
+        'lt':135,
+        'tl':135,
+        'l':180,
+        'lb':225,
+        'bl':225,
+        'b':270,
+        'rb':315,
+        'br':315
+    }
+
+    def __init__(self,matchobj,points):
+        self.name=matchobj.group(1)
+        self.label=self.name
+        matchlabel=re.match(ALTLABEL,self.name)
+        if matchlabel:
+            self.name=matchlabel.group(1)
+            self.label=matchlabel.group(2)
+        self.x=float(matchobj.group(2))
+        self.y=float(matchobj.group(3))
+        angle=matchobj.group(4)
+        matchangle=re.match(r'\s*(\S+)\s*',angle)
+        if matchangle:
+            if matchangle.group(1) in self.symb:
+                self.angle=self.symb[
+                    matchangle.group(1)
+                    ]
+            else:
+                self.angle=float(angle)
+        else:
+            self.angle=0
+        self.texname=texname(self.name,points)
+
+    def write(self):
+
+        sys.stdout.write('\\cnode(%f,%f){\\noderadius}{%s}\n' %
+            (self.x,self.y,self.texname))
+        sys.stdout.write(
+            '\\nput[labelsep=\\nodelabelsep]{%f}{%s}{$%s$}\n' %
+            (self.angle,self.texname,self.label))
+
+class Line:
+    
+    def __init__(self,matchobj,points):
+        self.point1=matchobj.group(1)
+        self.point2=matchobj.group(2)
+        self.points=points
+
+    def check(self):
+        
+        for point in [self.point1,self.point2]:
+            if not point in self.points:
+                sys.stderr.write(
+                    'Error: point %s not declared\n' % 
+                    point)
+                return False
+        return True
+        
+    def write(self):
+
+        sys.stdout.write('\\ncline{%s}{%s}\n' %
+            (self.points[self.point1].texname,
+             self.points[self.point2].texname) )
+
+
+if len(sys.argv)>1:
+    file=open(sys.argv[1])
+else:
+    file=sys.stdin
+
+input_lines=file.readlines()
+points={}
+lines=[]
+hdr=Header()
+ftr=Footer()
+
+for input_line in input_lines:
+    if re.match(REMARK,input_line) or re.match(EMPTY,input_line):
+        continue
+    match_point=re.match(POINT,input_line)
+    if match_point:
+        point=Point(match_point,points)
+        points[point.name]=point
+        continue
+    match_line=re.match(LINE,input_line)
+    if match_line:
+        line=Line(match_line,points)
+        lines.append(line)
+        continue
+    match_line=re.match(SPECIAL,input_line)
+    if match_line:
+        ftr.prepend(match_line.group(1),points)
+        continue 
+    sys.stderr.write('Error: mangled line %s' % input_line)
+    sys.exit(2)
+
+lines=[line for line in lines if line.check()]
+maxx=None
+maxy=None
+for point in points.itervalues():
+    maxx=max(maxx,point.x)
+    maxy=max(maxy,point.y)
+hdr.printout()
+sys.stdout.write('\\begin{picture}(%f,%f)\n' % (maxx,maxy))
+for point in points.itervalues():
+    point.write()
+for line in lines:
+    line.write()
+ftr.printout()
+
