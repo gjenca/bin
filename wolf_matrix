@@ -5,7 +5,7 @@ line=sys.stdin.readline().strip()
 print(r'\begin{pmatrix}')
 lines_out=[]
 for row_s in re.findall(r'{[^}]*}',line):
-    numbers=re.findall(r'[0-9.\-]+',row_s)
+    numbers=re.findall(r'[0-9.\-a]+',row_s)
     lines_out.append('&'.join(numbers))
 print((r'\\'+'\n').join(lines_out))
 print(r'\end{pmatrix}')
