@@ -1,3 +1,0 @@
-rsync -avz -e 'ssh -p 2222' jenca@euler.elf.stuba.sk:gtex/ /home/gejza/gtex/
-rsync -avz -e 'ssh -p 2222' jenca@euler.elf.stuba.sk:dristy/ /home/gejza/dristy/
-rsync -avz -e 'ssh -p 2222' jenca@euler.elf.stuba.sk:vyuka/ /home/gejza/vyuka/

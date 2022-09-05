@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+import sys
+import glob
+import os.path
+
+EXTS_VIDEO=('mkv','avi','mp4','wmv')
+EXTS_SUBS=('srt','ass')
+
+def find_exts(exts):
+
+    ret=[]
+    for ext in exts:
+        filelist=glob.glob(f'*.{ext}')
+        ret.extend(filelist)
+    return ret
+
+videos=find_exts(EXTS_VIDEO)
+if len(videos)>1:
+    print('Too many video files',file=sys.stderr)
+if not videos:
+    print('No video files',file=sys.stderr)
+subs=find_exts(EXTS_SUBS)
+if len(subs)>1:
+    print('Too many sub files',file=sys.stderr)
+if not subs:
+    print('No sub files',file=sys.stderr)
+subpath,subext=os.path.splitext(subs[0])
+videopath,videoext=os.path.splitext(videos[0])
+
+print(f"mv '{subs[0]}' '{videopath}{subext}'")
+
+
+
+            

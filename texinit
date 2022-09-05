@@ -1,20 +1,7 @@
 #!/bin/bash
 cat << THEEND
 \documentclass{article}
-\def\documentlanguage{english}
-\usepackage{ifpdf}
-\usepackage{ifxetex}
-\ifpdf %pdftex
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
 \usepackage[all,pdf,2cell]{xy}\UseAllTwocells\SilentMatrices
-\usepackage[\documentlanguage]{babel}
-\fi
-\ifxetex %xetex
-\usepackage[all,pdf,2cell]{xy}\UseAllTwocells\SilentMatrices
-\usepackage{polyglossia}
-\begingroup\edef\x{\endgroup\noexpand\setdefaultlanguage{\documentlanguage}}\x%
-\fi
 \usepackage{amsthm}
 \usepackage{amsmath}
 \usepackage{amsfonts}
