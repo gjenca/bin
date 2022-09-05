@@ -12,7 +12,12 @@ then
 fi
 if [ "$1" == 'off' ]
 then
-	fusermount -u ~/maciak/
+	if [ "$(uname)" == Darwin ]
+	then
+		umount -f ~/maciak/
+	else
+		fusermount -u ~/maciak/
+	fi
 	exit
 fi
 echo 'Usage : maciak [ on | off]'
